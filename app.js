@@ -6,9 +6,14 @@ const flash = require("connect-flash")
 //ejs engine
 const ejsMate = require("ejs-mate");
 const ExpressError = require('./utils/ExpressError');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
-const campgrounds = require('./routes/campground');
-const reviews = require('./routes/review');
+const userRoutes = require('./routes/users');
+const campgroundsRoutes = require('./routes/campground');
+const reviewsRoutes = require('./routes/review');
+
 
 
 //method to override post request when put or patch is required. 
@@ -40,12 +45,13 @@ function wrapAsync(fn) {
 
 }
 
-//ejs stuff
+//app configurations
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 //overrides the default ejs engine
 app.engine('ejs', ejsMate);
 
+//sessions plugin
 const sessionConfig = {
     secret: 'thisshouldbemoresecret',
     resave: false, 
@@ -56,8 +62,17 @@ const sessionConfig = {
         maxAge : 1000*60*60*24*7
     }
 }
+
+//middlewares
 app.use(session(sessionConfig));
 app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next)=>{
     res.locals.success = req.flash("success");
@@ -68,11 +83,11 @@ app.use((req, res, next)=>{
 //allows data in the req.body to be parsed across pages. 
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
-app.use('/campgrounds/', campgrounds);
-app.use('/campgrounds/:id/reviews/', reviews);
 app.use(express.static(path.join(__dirname,'public')));
 
-
+app.use('/', userRoutes)
+app.use('/campgrounds/', campgroundsRoutes);
+app.use('/campgrounds/:id/reviews/', reviewsRoutes);
 
 //home route cmd+d
 app.get('/', (req, res)=>{
