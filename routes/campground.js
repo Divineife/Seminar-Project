@@ -28,7 +28,7 @@ router.get("/new", isLoggedIn, ((req, res)=>{
 
 router.post('/',isLoggedIn, validateCampground, catchAsync(async(req, res, next)=>{
     //handles errors on submission of invalid campground data via postman 
-    //if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400)
+    if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400)
     
     const campground = new Campground(req.body.campground);
     await campground.save();

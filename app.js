@@ -63,7 +63,7 @@ const sessionConfig = {
     }
 }
 
-//middlewares
+//middlewares to render success and error messages
 app.use(session(sessionConfig));
 app.use(flash());
 
@@ -88,7 +88,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname,'public')));
 
-app.use('/', userRoutes)
+app.use('/', userRoutes);
 app.use('/campgrounds/', campgroundsRoutes);
 app.use('/campgrounds/:id/reviews/', reviewsRoutes);
 
