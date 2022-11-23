@@ -7,21 +7,19 @@ const Campground = require("../models/campground");
 
 const {isLoggedIn, isAuthor, validateCampground} = require('../middleware');
 
-
-router.get("/", catchAsync(campgrounds.index));
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
 
 //isLoggedIn is the authentication middle ware that protects the route.
 router.get("/new", isLoggedIn, campgrounds.renderNewForm) ;
 
-router.post('/',isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+router.route('/:id')
+    .get(catchAsync(campgrounds.showCampground))
+    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground))
+    .delete(isLoggedIn,isAuthor, catchAsync(campgrounds.deleteCampground));
 
-//nested populate populates the author for each review and the author for each campground
-router.get("/:id", catchAsync(campgrounds.showCampground));
+
 
 router.get('/:id/edit',isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm));
-
-router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground));
-
-router.delete('/:id',isLoggedIn,isAuthor, catchAsync(campgrounds.deleteCampground));
-
 module.exports = router;
