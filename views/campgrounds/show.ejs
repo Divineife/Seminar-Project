@@ -32,14 +32,9 @@
         <% if(currentUser){ %> 
         <h2>Leave a Review</h2>
             <form action="/campgrounds/<%=campground._id%>/reviews" class ="mb-3 validated-form" method="post" novalidate>
-                <!-- <div class="mb-3">
-                    <label class ="form-label" for="rating">Rating</label>
-                    <input type="range" class='form-range' min='1' max="5" name="review[rating]" id="Rating">
-                </div> -->
                 <div class="mb-3">
                     <fieldset class="starability-coinFlip">
-                        <legend class ="form-label" for="rating">Rating:</legend>
-                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                        <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
                         <input type="radio" id="first-rate1" name="review[rating]" value="1" />
                         <label for="first-rate1" title="Terrible">1 star</label>
                         <input type="radio" id="first-rate2" name="review[rating]" value="2" />
@@ -53,7 +48,7 @@
                       </fieldset>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="body">Review :</label>
+                    <label class="form-label" for="body">Review Text</label>
                     <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
                     <div class="valid-feedback">Looks good!</div>
                 </div>
