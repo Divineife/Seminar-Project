@@ -3,13 +3,15 @@ const router = express.Router();
 const catchAsync = require("../utils/catchAsync");
 const campgrounds = require("../controllers/campgrounds")
 const ExpressError = require('../utils/ExpressError');
-const Campground = require("../models/campground");
-
 const {isLoggedIn, isAuthor, validateCampground} = require('../middleware');
+//cloudinary setup, storage is required to store data elsewhere other than local
+const multer = require('multer');
+const {storage} = require('../cloudinary');
+const upload = multer({storage: storage});
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+    .post(isLoggedIn,upload.array('image'), validateCampground,catchAsync(campgrounds.createCampground));
 
 //isLoggedIn is the authentication middle ware that protects the route.
 router.get("/new", isLoggedIn, campgrounds.renderNewForm) ;
