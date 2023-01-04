@@ -11,14 +11,15 @@ const upload = multer({storage: storage});
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn,upload.array('image'), validateCampground,catchAsync(campgrounds.createCampground));
+    .post(isLoggedIn,upload.array("image"), validateCampground,catchAsync(campgrounds.createCampground));
 
 //isLoggedIn is the authentication middle ware that protects the route.
 router.get("/new", isLoggedIn, campgrounds.renderNewForm) ;
 
+//router.route helps to group endpoints together
 router.route('/:id')
     .get(catchAsync(campgrounds.showCampground))
-    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground))
+    .put(isLoggedIn, isAuthor, upload.array('image'), catchAsync(campgrounds.updateCampground))
     .delete(isLoggedIn,isAuthor, catchAsync(campgrounds.deleteCampground));
 
 

@@ -1,3 +1,4 @@
+//allows me to access env var via process.env.varName in dev mode
 if(process.env.NODE_ENV !== "production"){
     require('dotenv').config();
 }
