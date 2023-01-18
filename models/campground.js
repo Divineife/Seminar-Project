@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const Review = require('./review');
 
 const CampgroundSchema = new Schema({
-    imageUrl: String,
+    // imageUrl: String,
     title: String,
     images:[
         {

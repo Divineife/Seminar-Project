@@ -2,7 +2,8 @@
 <div class="row">
     <h1 class="text-center">Edit Campground</h1>
     <div class="col-6 offset-3">
-        <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+        <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST" novalidate class="validated-form"
+            enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input class="form-control" type="text" id="title" name="campground[title] " required
@@ -15,11 +16,10 @@
                     value="<%=campground.location %>">
                     <div class="valid-feedback">Looks good!</div>
             </div>
+
             <div class="mb-3">
-                <label class="form-label" for="image">Image Url</label>
-                <input class="form-control" type="text" id="image" name="campground[imageUrl] " required
-                    value="<%=campground.imageUrl %>">
-                    <div class="valid-feedback">Looks good!</div>
+                <label for="formFile" class="form-label">Default file input example</label>
+                <input class="form-control" type="file" id="formFile">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="price">Campground Price</label>
@@ -37,9 +37,24 @@
                     name="campground[description] "required><%= campground.description%></textarea>
             </div>
             <div class="valid-feedback">Looks good!</div>
+
+            <div class="mb-3 custom-file">
+                <label for="image" class="form-label custom-file-label">Add more image(s)</label>
+                <input class="form-control" type="file" id="image" name="image" multiple onchange="previewMultiple(event)">
+            </div>
+
+            <div>
+                <div class="mb-3">
+                    <% campground.images.forEach(function(img, i){ %>
+                        <img src="<%= img.url %> " class="img-thumbnail" alt="">
+                    <% }) %> 
+                </div>
+            </div>
+
             <div class="mb-3">
                 <button class="btn btn-info">Update Campground</button>
             </div>
+            
         </form>
         <a href="/campgrounds/<%= campground._id%>">Back To Campground</a>
 
